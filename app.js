@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 
 dotenv.config({ path: `${__dirname}/.env` });
 
-const indexRouter = require("./routes/index");
+const apartmentRouter = require("./routes/apartment");
 const usersRouter = require("./routes/users");
 
 const app = express();
@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
+app.use("/", apartmentRouter);
 app.use("/users", usersRouter);
 
 module.exports = app;

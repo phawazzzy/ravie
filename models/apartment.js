@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const apartmentSchema = Schema({
-  name: { type: String, required: true },
+  apartmentName: { type: String, required: true },
   address: { type: String, required: true },
   dateCreated: { type: Date, default: Date.now }
 });

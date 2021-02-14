@@ -18,4 +18,11 @@ const userLoginValidation = Joi.object().keys({
     .required()
 });
 
-module.exports = { userSignupValidation, userLoginValidation };
+const apartmentValidation = Joi.object().keys({
+  apartmentName: Joi.string().trim().min(3).label("apartmentName")
+    .required(),
+  address: Joi.string().trim().min(3).label("address")
+    .required()
+});
+
+module.exports = { userSignupValidation, userLoginValidation, apartmentValidation };
