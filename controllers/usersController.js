@@ -1,4 +1,5 @@
-const { hashPassword, tokengen } = require("../helpers/authHelpers");
+/* eslint-disable no-underscore-dangle */
+const { hashPassword, tokengen, isPasswordValid } = require("../helpers/authHelpers");
 const User = require("../models/users");
 
 exports.signUp = async (req, res) => {
@@ -16,7 +17,7 @@ exports.signUp = async (req, res) => {
         status: false,
         message: "user with this email address exist",
         data: null,
-        errors: ["DUPLICATE_EMAIL"]
+        error: ["DUPLICATE_EMAIL"]
       });
     }
 
@@ -36,7 +37,7 @@ exports.signUp = async (req, res) => {
         status: false,
         message: "an error occured",
         data: null,
-        errors: ["user with this email address exist"]
+        error: ["user with this email address exist"]
       });
     }
 
@@ -60,5 +61,47 @@ exports.signUp = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
-  
+  try {
+    const { email, password } = req.body;
+
+    // find the user account
+    const user = await User.findOne({ email }, { _v: 0 });
+    if (!user || user.length < 1) {
+      return res.status(404).json({
+        status: false,
+        message: "Auth Failed, please check that your login details are correct",
+        data: null,
+        error: ["Un-Authorized"]
+      });
+    }
+    // check password
+    const checkPassword = isPasswordValid(user.password, password);
+    if (!checkPassword) {
+      return res.status(401).json({
+        status: false,
+        message: "Auth Failed, please check that your login details are correct",
+        data: null,
+        error: ["WRONG_PASSWORD"]
+      });
+    }
+
+    // generate login token
+    const token = tokengen({ userId: user._id });
+    return res.status(200).json({
+      status: true,
+      message: "User has been logged in successfully",
+      data: {
+        user,
+        token
+      },
+      error: null
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: false,
+      message: "bad request",
+      data: null,
+      error: [error]
+    });
+  }
 };
