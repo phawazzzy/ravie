@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", apartmentRouter);
+app.use("/apartments", apartmentRouter);
 app.use("/users", usersRouter);
 
 module.exports = app;
