@@ -6,10 +6,18 @@ const reviewSchema = Schema({
   apartment: { type: Schema.Types.ObjectId, ref: "apartment", required: true },
   media: { type: String },
   mediaKey: { type: String },
-  landlord: { type: String },
-  environment: { type: String },
-  amenities: { type: String },
-  helpfulCount: { type: Number },
+  landlord: {
+    review: { type: String },
+    helpfulCount: { type: Number }
+  },
+  environment: {
+    review: { type: String },
+    helpfulCount: { type: Number }
+  },
+  amenities: {
+    review: { type: String },
+    helpfulCount: { type: Number }
+  },
   dateCreated: { type: Date, default: Date.now },
   reviewer: { type: Schema.Types.ObjectId, ref: "user", required: true }
 
