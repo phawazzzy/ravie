@@ -6,7 +6,6 @@ exports.postReview = async (req, res) => {
     const { landlordReview, envReview, amenitiesRev } = req.body;
     const apartmentId = req.params.id;
     const loggedInuser = res.locals.user.userId;
-    console.log(loggedInuser);
 
     // check if apartment id is present
     if (!apartmentId) {
@@ -35,8 +34,12 @@ exports.postReview = async (req, res) => {
       environment: { review: envReview },
       amenities: { review: amenitiesRev },
       reviewer: loggedInuser
-
     };
+
+    if (req.file) {
+      payload.media = req.file.location;
+      payload.mediaKey = req.file.key;
+    }
     const review = await reviews.create(payload);
     if (!review) {
       return res.status(500).json({
