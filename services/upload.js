@@ -21,10 +21,10 @@ aws.config.update({
 });
 
 const imageFilter = (req, file, cb) => {
-  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png" || file.mimetype === "video/mp4") {
     cb(null, true);
   } else {
-    cb(new Error("Invalid file type, only JPEG and PNG is allowed!"), false);
+    cb(new Error("Invalid file type, only JPEG, PNG, and mp4 files are allowed!"), false);
   }
 };
 
