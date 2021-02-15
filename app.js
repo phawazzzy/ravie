@@ -9,6 +9,7 @@ dotenv.config({ path: `${__dirname}/.env` });
 
 const apartmentRouter = require("./routes/apartment");
 const usersRouter = require("./routes/users");
+const reviewRouter = require("./routes/review");
 
 const app = express();
 const dbUri = process.env.DB_URI;
@@ -31,5 +32,6 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/apartments", apartmentRouter);
 app.use("/users", usersRouter);
+app.use("/reviews", reviewRouter);
 
 module.exports = app;
