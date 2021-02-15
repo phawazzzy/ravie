@@ -109,3 +109,10 @@ exports.markHelpful = async (req, res) => {
 };
 
 // exports.sortBy
+exports.sortByMostRecent = async (req, res) => {
+
+};
+
+exports.sortByMostHelpfull = async (req, res) => {
+
+};
