@@ -30,7 +30,7 @@ exports.postReview = async (req, res) => {
 
     const payload = {
       apartment: apartmentId,
-      landloard: { review: landlordReview },
+      landlord: { review: landlordReview },
       environment: { review: envReview },
       amenities: { review: amenitiesRev },
       reviewer: loggedInuser
@@ -51,7 +51,7 @@ exports.postReview = async (req, res) => {
     }
     return res.status(200).json({
       status: true,
-      message: "operatiion successful",
+      message: "operation successful",
       data: review,
       error: []
     });
@@ -63,4 +63,47 @@ exports.postReview = async (req, res) => {
       error: [error.message]
     });
   }
+};
+
+exports.markHelpful = async (req, res) => {
+  const { landlordMark, envMark, amenitiesMark } = req.body;
+
+  const reviewId = req.params.id;
+
+  // check if apartment id is present
+  if (!reviewId) {
+    return res.status(422).json({
+      status: false,
+      message: "apartment id is missing, please provide it",
+      data: null,
+      errors: ["INCOMPLETE_REQUIRED_PAYLOAD"]
+    });
+  }
+
+  //  check if id provided is  valid mongoose id
+  const isValid = mongoose.Types.ObjectId.isValid(reviewId); // true
+  if (!isValid) {
+    return res.status(422).json({
+      status: false,
+      message: "invalid apart id",
+      data: null,
+      errors: ["INVALID_PAYLOAD"]
+    });
+  }
+
+  const like = await reviews.findByIdAndUpdate({ _id: reviewId }, { $inc: { "landlord.helpfulCount": landlordMark, "environment.helpfulCount": envMark, "amenities.helpfulCount": amenitiesMark } });
+  if (!like) {
+    return res.status(500).json({
+      status: false,
+      message: "An error occured",
+      data: null,
+      error: ["ERROR_OCCURED"]
+    });
+  }
+  return res.status(200).json({
+    status: true,
+    message: "operation successful",
+    data: like,
+    error: []
+  });
 };
